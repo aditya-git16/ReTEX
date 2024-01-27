@@ -5,6 +5,14 @@ pragma solidity ^0.8.13;
 contract ReTEX {
 
     address public immutable owner;
+    event Log(address indexed sender, string message);
+
+    /*
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only the owner can call this function");
+        _; // Continue with the function execution if the modifier check passes
+    }
+    */
 
     constructor() {
         owner = msg.sender;
@@ -20,7 +28,7 @@ contract ReTEX {
 
     mapping(address => UserData) public UserDatamap;
 
-    function setValues(uint256 _value1, uint256 _value2 ) external {
+    function setValues(uint256 _value1, uint256 _value2 ) external  {
         // Use the sender's address as the key in the mapping
         address sender = msg.sender;
         
@@ -39,6 +47,7 @@ contract ReTEX {
     function setName(string memory _name) external {
         UserDatamap[msg.sender].name = _name;
         nameToAddress[_name] = msg.sender;
+        emit Log(msg.sender, _name);
     }
 
     function getValueByName(string memory _name) external view returns (uint256, uint256, string memory) {
