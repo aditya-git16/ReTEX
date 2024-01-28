@@ -65,12 +65,12 @@ export default function CounterApp() {
         <>
       <div className="container mx-auto mt-8">
       <h1 className="text-3xl font-semibold mb-4">Dashboard</h1>
-      <div className="bg-white p-8 rounded shadow">
+      <div className="box">
       <div className="mb-4">
             <h2 className="text-xl font-semibold mb-2">Produced Units</h2>
             <p>{producedUnits}</p>
             <button
-                className="bg-blue-500 text-white rounded px-4 py-1 ml-2"
+                className="submit-btn"
                 onClick={() => setProducedUnits(producedUnits + 1)}
             >
                 Increment
@@ -80,7 +80,7 @@ export default function CounterApp() {
             <h2 className="text-xl font-semibold mb-2">Consumed Units</h2>
             <p>{consumedUnits}</p>
             <button
-                className="bg-blue-500 text-white rounded px-4 py-1 ml-2"
+                className="submit-btn"
                 onClick={() => setConsumedUnits(consumedUnits + 1)}
             >
                 Increment
@@ -95,11 +95,11 @@ export default function CounterApp() {
                 <p>Please add your name:</p>
                 <input
                   type="text"
-                  className="border border-gray-300 rounded px-2 py-1"
+                  className="border border-gray-300 rounded px-2 py-1 mr-2"
                   id="input"
                 />
                 <button
-                className="bg-blue-500 text-white rounded px-4 py-1 ml-2"
+                className="submit-btn"
                 onClick={handleSetName}
                 >
                 Set Name
@@ -108,7 +108,7 @@ export default function CounterApp() {
             )}
           </div>
           <button
-              className="bg-blue-500 text-white rounded px-4 py-1"
+              className="submit-btn"
               onClick={handleUpdateValues}
           >
               Update Values
