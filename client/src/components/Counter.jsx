@@ -1,90 +1,89 @@
-import { useState } from "react"
-import Counter from "./Counter.sol/Counter.json"
+import { contractAddress } from "../utils/constants"
+import { useState, useEffect } from "react"
+import Ret from "./Counter.sol/ReTEX.json"
 const ethers = require("ethers")
 
 export default function CounterApp() {
-    const contractAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
-    const [value, setValue] = useState();
+    const [producedUnits, setProducedUnits] = useState(0);
+    const [consumedUnits, setConsumedUnits] = useState(0);
+    const [name, setName] = useState('');
 
-
-    const IncrementHandler = async () => {
-        try {
-          if (window.ethereum) {
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            // Assuming you have a function to connect to the contract
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const Signer = provider.getSigner();
+            const contract = new ethers.Contract(contractAddress, Ret.abi, Signer);
     
-            const Contract = new ethers.Contract(contractAddress, Counter.abi, Signer);
+            // Fetch produced units
+            const [produced, consumed, _name] = await contract.getValues();
+            
+            setProducedUnits(ethers.BigNumber.from(produced).toNumber());
     
-            const Tx = await Contract.increment();
-            const TxRecit = await Tx.wait();
-            console.log('after :', TxRecit);
-          } else {
-            console.error(
-              'MetaMask not found. Please install MetaMask to use this application.',
-            );
+            // Fetch consumed units
+            setConsumedUnits(ethers.BigNumber.from(consumed).toNumber());
+            setName(_name);
+          } catch (error) {
+            console.error('Error fetching data:', error);
           }
-        } catch (error) {
-          console.log(error);
-          alert(error);
+        };
+    
+        if (contractAddress && Ret.abi) {
+          fetchData();
         }
-      };
+      }, [contractAddress, Ret.abi]);
 
-      const ConvertValue = () => {
-        const temp = ethers.BigNumber.from(value).toNumber();
-        setValue(temp);
-      };
-
-      const ReadContractValue = async () => {
+      const handleSetName = async () => {
         try {
-          if (window.ethereum) {
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const Signer = provider.getSigner();
-    
-            // Create a new instance of the Contract class
-            const Contract = new ethers.Contract(contractAddress, Counter.abi, Signer);
-    
-            // Call the getValue function from the contract
-            const Tx = await Contract.number();
-            console.log('Tx :', Tx);
-    
-            setValue(Tx._hex);
-          } else {
-            console.error(
-              'MetaMask not found. Please install MetaMask to use this application.',
-            );
-          }
+          var inp = document.getElementById("input").value;
+          const provider = new ethers.providers.Web3Provider(window.ethereum);
+          const signer = provider.getSigner();
+          const contract = new ethers.Contract(contractAddress, Ret.abi, signer);
+          console.log(inp);
+          await contract.setName(inp);
+          setName(inp);
         } catch (error) {
-          console.log(error);
-          alert(error);
+          console.error('Error setting name:', error);
         }
       };
 
       return (
         <>
-
-        <div className="valueContainer">
-          <p className="key">
-            Value: <span>{value ?? ''}</span>
-          </p>
-
-          <button onClick={ConvertValue} className="btn" disabled={!value}>
-            deCode
-          </button>
+      <div className="container mx-auto mt-8">
+      <h1 className="text-3xl font-semibold mb-4">Dashboard</h1>
+      <div className="bg-white p-8 rounded shadow">
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold mb-2">Produced Units</h2>
+          <p>{producedUnits}</p>
         </div>
-
-      <div className="flex flex-col gap-10">
-
-        <button
-          className="btn plus"
-          onClick={IncrementHandler}
-          title="increment"
-        >
-          +
-        </button>
-        <button className="btn" onClick={ReadContractValue} title="read value">
-          get value
-        </button>
+        <div className="mb-4">
+          <h2 className="text-xl font-semibold mb-2">Consumed Units</h2>
+          <p>{consumedUnits}</p>
+        </div>
+        <div className="mb-4">
+            <h2 className="text-xl font-semibold mb-2">Name</h2>
+            {name ? (
+              <p>{name}</p>
+            ) : (
+              <>
+                <p>Please add your name:</p>
+                <input
+                  type="text"
+                  className="border border-gray-300 rounded px-2 py-1"
+                  id="input"
+                />
+                <button
+                className="bg-blue-500 text-white rounded px-4 py-1 ml-2"
+                onClick={handleSetName}
+                >
+                Set Name
+                </button>
+              </>
+            )}
+          </div>
       </div>
+    </div>
       </>
       )
     }
