@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ethers } from 'ethers';
 import { contractAddress } from '../utils/constants';
-import Ret from "../components/Counter.sol/ReTEX.json"
+import Ret from "../utils/Counter.sol/ReTEX.json"
 
 const Search = () => {
   const [searchValue, setSearchValue] = useState('');
