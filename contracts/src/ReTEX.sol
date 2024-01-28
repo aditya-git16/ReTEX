@@ -71,9 +71,8 @@ contract ReTEX {
         return userFavorites[msg.sender];
     }
 
-    function setTrade(address selectedUser, uint256 tradeResource) external {
+    function setTrade(address selectedUser, uint256 tradeResource) external  {
         require(tradeResource > 0, "Trade amount must be greater than zero");
-        require(userResourceBalance[msg.sender] >= tradeResource, "Insufficient resources to trade");
         bool isFavorite = false;
         for (uint256 i = 0; i < userFavorites[msg.sender].length; i++) {
             if (userFavorites[msg.sender][i] == selectedUser) {
@@ -84,11 +83,12 @@ contract ReTEX {
         require(isFavorite, "Selected user is not in favorites");
 
         
-        userResourceBalance[msg.sender] -= tradeResource;
-        userResourceBalance[selectedUser] += tradeResource;
+        UserDatamap[msg.sender].produced -= tradeResource;
+        UserDatamap[selectedUser].consumed += tradeResource;
 
-        emit ResourcesTraded(msg.sender, selectedUser, tradeResource);
+        
         emit TradeInitiated(msg.sender, selectedUser, tradeResource);
     }
 
 }
+
