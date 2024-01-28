@@ -61,10 +61,9 @@ contract ReTEX {
         UserData storage user = UserArray[index];
         return (user.produced, user.consumed, user.name);
     }
-    
+
     function setTrade(string memory _name, uint256 tradeResource) external  {
         require(tradeResource > 0, "Trade amount must be greater than zero");
-        require(tradeResource > UserDatamap[msg.sender].produced - UserDatamap[msg.sender].consumed, "Trade amount must be more than available");
         UserDatamap[msg.sender].produced -= tradeResource;
         UserDatamap[nameToAddress[_name]].consumed += tradeResource;
         emit TradeInitiated(msg.sender, nameToAddress[_name], tradeResource);
