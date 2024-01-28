@@ -20,6 +20,8 @@ contract ReTEX {
     mapping(string => address) public nameToAddress;
 
     mapping(address => UserData) public UserDatamap;
+    mapping(address => address[]) public userFavorites;
+    event TradeInitiated(address indexed user, address indexed selectedUser, uint256 tradeAmount);
 
     function setValues(uint256 _value1, uint256 _value2) external {
         // Use the sender's address as the key in the mapping
@@ -61,5 +63,32 @@ contract ReTEX {
         return (user.produced, user.consumed, user.name);
     }
 
+    function addToFavorites(address toUserAdd) external {
+        userFavorites[msg.sender].push(toUserAdd);
+    }
+
+   function getFavorites() external view returns (address[] memory) {
+        return userFavorites[msg.sender];
+    }
+
+    function setTrade(address selectedUser, uint256 tradeResource) external {
+        require(tradeResource > 0, "Trade amount must be greater than zero");
+        require(userResourceBalance[msg.sender] >= tradeResource, "Insufficient resources to trade");
+        bool isFavorite = false;
+        for (uint256 i = 0; i < userFavorites[msg.sender].length; i++) {
+            if (userFavorites[msg.sender][i] == selectedUser) {
+                isFavorite = true;
+                break;
+            }
+        }
+        require(isFavorite, "Selected user is not in favorites");
+
+        
+        userResourceBalance[msg.sender] -= tradeResource;
+        userResourceBalance[selectedUser] += tradeResource;
+
+        emit ResourcesTraded(msg.sender, selectedUser, tradeResource);
+        emit TradeInitiated(msg.sender, selectedUser, tradeResource);
+    }
 
 }
