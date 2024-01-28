@@ -4,13 +4,16 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { MetaMaskContextProvider } from "./hooks/useMetaMask";
+import { BrowserRouter as Router } from "react-router-dom"
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 root.render(
   <React.StrictMode>
-    <MetaMaskContextProvider>
-      <App />
-    </MetaMaskContextProvider>
+    <Router >
+      <MetaMaskContextProvider>
+        <App />
+      </MetaMaskContextProvider>
+    </Router>
   </React.StrictMode>
 );
 

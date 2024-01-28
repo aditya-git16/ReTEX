@@ -6,7 +6,7 @@ export const Display = () => {
   const { wallet } = useMetaMask()
 
   return (
-    <div className="mt-10 flex flex-col items-center justify-center h-screen">
+    <div className="display flex flex-col items-center justify-center">
       {wallet.accounts.length > 0 && (
         <>
           <div className="mb-4">Wallet Accounts: {wallet.accounts[0]}</div>
