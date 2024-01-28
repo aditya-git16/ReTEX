@@ -22,7 +22,7 @@ export default function Trade() {
     return (
         <div className="container mx-auto mt-8">
             <h1 className="text-3xl font-semibold mb-4">Trade Component</h1>
-            <div className="bg-white p-8 rounded shadow">
+            <div className="box">
                 <div className="mb-4">
                     <label htmlFor="name" className="text-xl font-semibold mb-2 mr-2">Name</label>
                     <input

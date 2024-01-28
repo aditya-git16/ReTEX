@@ -28,13 +28,13 @@ const Search = () => {
   };
 
   return (
-    <div className="container mx-auto mt-8">
+    <div className="container mx-auto mt-8 h-screen">
       <h1 className="text-3xl font-semibold mb-4">Search</h1>
-      <div className="bg-white p-8 rounded shadow">
+      <div className="box">
         <input
           type="text"
           className="border border-gray-300 px-3 py-2 w-full mb-4 rounded-md"
-          placeholder="Enter search term"
+          placeholder="Enter User Name"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
