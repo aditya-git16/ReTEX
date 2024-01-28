@@ -1,16 +1,18 @@
 import React from 'react';
 import './App.css';
-import Header from './components/Header';
-import { Display } from './components/Display';
-import CounterApp from './components/Counter';
+import { Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import Temp from './utils/Temp';
+import Search from './pages/Search';
 
 function App() {
   return (
-    <div className='flex flex-col items-center justify-around w-full'>
-      <Header />
-      <Display />
-      <CounterApp />
-    </div>
+    <Routes>
+      <Route element={<Temp />} >
+        <Route path="/" element={<Home />} />
+        <Route path="/search" element={<Search />} />
+      </Route>
+    </Routes>
   );
 }
 
