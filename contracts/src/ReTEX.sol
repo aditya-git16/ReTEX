@@ -4,7 +4,9 @@ pragma solidity ^0.8.13;
 
 contract ReTEX {
     address public immutable owner;
-
+    // address[] public allUserAddresses; // New array to store all user addresses
+    UserData[] public UserArray;
+    
     constructor() {
         owner = msg.sender;
     }
@@ -35,8 +37,8 @@ contract ReTEX {
     {
         // Retrieve the struct associated with the sender's address
         UserData storage userData = UserDatamap[msg.sender];
-
-        return (userData.produced, userData.consumed, userData.name);
+        
+        return (userData.produced , userData.consumed, userData.name);
     }
 
     function setName(string memory _name) external {
@@ -51,4 +53,13 @@ contract ReTEX {
         UserData storage userData = UserDatamap[userAddress];
         return (userData.produced, userData.consumed, userData.name);
     }
+
+    function getUserDetails(uint256 index) external view returns (uint256, uint256, string memory) {
+        require(index < UserArray.length, "Index out of bounds");
+
+        UserData storage user = UserArray[index];
+        return (user.produced, user.consumed, user.name);
+    }
+
+
 }
