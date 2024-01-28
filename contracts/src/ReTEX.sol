@@ -63,32 +63,27 @@ contract ReTEX {
         return (user.produced, user.consumed, user.name);
     }
 
-    function addToFavorites(address toUserAdd) external {
-        userFavorites[msg.sender].push(toUserAdd);
+    function addToFavorites(string memory _name) external {
+        userFavorites[msg.sender].push(nameToAddress[_name]);
     }
 
    function getFavorites() external view returns (address[] memory) {
         return userFavorites[msg.sender];
     }
 
-    function setTrade(address selectedUser, uint256 tradeResource) external  {
+    function setTrade(string memory _name, uint256 tradeResource) external  {
         require(tradeResource > 0, "Trade amount must be greater than zero");
+        require(tradeResource > UserDatamap[msg.sender].produced - UserDatamap[msg.sender].consumed, "Trade amount must be more than available");
         bool isFavorite = false;
         for (uint256 i = 0; i < userFavorites[msg.sender].length; i++) {
-            if (userFavorites[msg.sender][i] == selectedUser) {
+            if (userFavorites[msg.sender][i] == nameToAddress[_name]) {
                 isFavorite = true;
                 break;
             }
         }
         require(isFavorite, "Selected user is not in favorites");
-
-        
         UserDatamap[msg.sender].produced -= tradeResource;
-        UserDatamap[selectedUser].consumed += tradeResource;
-
-        
-        emit TradeInitiated(msg.sender, selectedUser, tradeResource);
+        UserDatamap[nameToAddress[_name]].consumed += tradeResource;
+        emit TradeInitiated(msg.sender, nameToAddress[_name], tradeResource);
     }
-
 }
-
