@@ -2,9 +2,9 @@ const hre = require("hardhat");
 
 async function main() {
     const deployedContract = await hre.ethers.deployContract("ReTEX");
-    await deployedContract.waitForDeployment();
+    console.log("Contract deployed to address:", deployedContract);
     console.log(
-        `${deployedContract.target}`
+        `Contract Deployed to ${deployedContract.address}`
     );
 }
 

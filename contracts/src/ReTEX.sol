@@ -4,9 +4,8 @@ pragma solidity ^0.8.13;
 
 contract ReTEX {
     address public immutable owner;
-    // address[] public allUserAddresses; // New array to store all user addresses
     UserData[] public UserArray;
-    
+
     constructor() {
         owner = msg.sender;
     }
@@ -20,7 +19,11 @@ contract ReTEX {
     mapping(string => address) public nameToAddress;
 
     mapping(address => UserData) public UserDatamap;
-    event TradeInitiated(address indexed user, address indexed selectedUser, uint256 tradeAmount);
+    event TradeInitiated(
+        address indexed user,
+        address indexed selectedUser,
+        uint256 tradeAmount
+    );
 
     function setValues(uint256 _value1, uint256 _value2) external {
         // Use the sender's address as the key in the mapping
@@ -38,8 +41,8 @@ contract ReTEX {
     {
         // Retrieve the struct associated with the sender's address
         UserData storage userData = UserDatamap[msg.sender];
-        
-        return (userData.produced , userData.consumed, userData.name);
+
+        return (userData.produced, userData.consumed, userData.name);
     }
 
     function setName(string memory _name) external {
@@ -55,14 +58,16 @@ contract ReTEX {
         return (userData.produced, userData.consumed, userData.name);
     }
 
-    function getUserDetails(uint256 index) external view returns (uint256, uint256, string memory) {
+    function getUserDetails(
+        uint256 index
+    ) external view returns (uint256, uint256, string memory) {
         require(index < UserArray.length, "Index out of bounds");
 
         UserData storage user = UserArray[index];
         return (user.produced, user.consumed, user.name);
     }
 
-    function setTrade(string memory _name, uint256 tradeResource) external  {
+    function setTrade(string memory _name, uint256 tradeResource) external {
         require(tradeResource > 0, "Trade amount must be greater than zero");
         UserDatamap[msg.sender].produced -= tradeResource;
         UserDatamap[nameToAddress[_name]].consumed += tradeResource;
